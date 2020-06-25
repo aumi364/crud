@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const List = require("../../models/list");
-
-router.get("/", async function (req, res, next) {
+const checkAuth = require("../../middleware/check-auth");
+router.get("/", checkAuth, async function (req, res, next) {
   let results = await List.find({});
   res.status(200).json({
     list: results,
   });
 });
-router.post("/", function (req, res, next) {
+router.post("/", checkAuth, function (req, res, next) {
   const list = new List({
     todo: req.body.todo,
     completed: req.body.completed,
@@ -19,7 +19,7 @@ router.post("/", function (req, res, next) {
     });
   });
 });
-router.patch("/:listId", function (req, res, next) {
+router.patch("/:listId", checkAuth, function (req, res, next) {
   const list = {
     todo: req.body.todo,
     completed: req.body.completed,
@@ -32,7 +32,7 @@ router.patch("/:listId", function (req, res, next) {
       });
     });
 });
-router.delete("/:listId", function (req, res, next) {
+router.delete("/:listId", checkAuth, function (req, res, next) {
   List.findByIdAndDelete(req.params.listId)
     .exec()
     .then(() => {

@@ -4,8 +4,9 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
 const listRoutes = require("./api/routes/list");
+const userRoutes = require("./api/routes/user");
 const bodyParser = require("body-parser");
-mongoose.connect("mongodb://127.0.0.1:27017/crud", {
+mongoose.connect(process.env.MONGO, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -23,7 +24,7 @@ app.get("/", function (req, res) {
   });
 });
 app.use("/list", listRoutes);
-
+app.use("/user", userRoutes);
 //error handling
 app.use((req, res, next) => {
   const error = new Error("not found");
